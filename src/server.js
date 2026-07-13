@@ -22,7 +22,6 @@ for (const [key, value] of Object.entries({
 const app = express();
 const API_BASE = "https://discord.com/api/v10";
 const EPHEMERAL = 1 << 6;
-const ADMINISTRATOR = 1n << 3n;
 
 app.use("/interactions", express.raw({ type: "application/json", limit: "1mb" }));
 app.use(express.json({ limit: "1mb" }));
@@ -44,10 +43,6 @@ function verifyDiscordRequest(req) {
   }
 }
 
-function isAdministrator(interaction) {
-  const permissions = BigInt(interaction.member?.permissions ?? "0");
-  return (permissions & ADMINISTRATOR) === ADMINISTRATOR;
-}
 
 function getTargetUser(interaction) {
   const option = interaction.data?.options?.find((item) => item.name === "user");
@@ -156,15 +151,6 @@ app.post("/interactions", async (req, res) => {
     });
   }
 
-  if (!isAdministrator(interaction)) {
-    return res.json({
-      type: 4,
-      data: {
-        content: "Du bist für diesen Befehl nicht autorisiert.",
-        flags: EPHEMERAL,
-      },
-    });
-  }
 
   const target = getTargetUser(interaction);
 
@@ -199,10 +185,16 @@ app.post("/interactions", async (req, res) => {
 
     let message = "❌ Die DM konnte nicht gesendet werden.";
 
-    if (error.status === 403) {
+    if (error.status === 401) {
+      message += " Der Bot-Token ist ungültig.";
+    } else if (error.status === 403) {
       message += " Der Nutzer hat DMs möglicherweise deaktiviert oder den Bot blockiert.";
+    } else if (error.status === 404) {
+      message += " Nutzer oder DM-Kanal wurde nicht gefunden.";
     } else if (error.status === 429) {
       message += " Discord begrenzt die Anfrage gerade.";
+    } else if (error.status) {
+      message += ` Discord API Fehler ${error.status}.`;
     }
 
     await editReply(
