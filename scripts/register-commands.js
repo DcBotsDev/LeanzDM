@@ -16,7 +16,6 @@ const commands = [
     description: "Sendet einem Nutzer eine vorgefertigte Direktnachricht.",
     type: 1,
     dm_permission: false,
-    default_member_permissions: "8",
     options: [
       {
         name: "user",
