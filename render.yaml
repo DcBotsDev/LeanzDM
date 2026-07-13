@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: discord-dm-authorized-app
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DISCORD_APPLICATION_ID
+        sync: false
+      - key: DISCORD_PUBLIC_KEY
+        sync: false
+      - key: DISCORD_BOT_TOKEN
+        sync: false
+      - key: DISCORD_GUILD_ID
+        sync: false
+      - key: DM_MESSAGE
+        sync: false
+      - key: ALLOWED_ROLE_IDS
+        sync: false
+      - key: DM_TO_OPTED_IN_USERS
+        value: "false"
+      - key: OPT_IN_ROLE_ID
+        sync: false
+      - key: DM_DELAY_MS
+        value: "1200"

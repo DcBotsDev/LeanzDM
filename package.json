@@ -1,0 +1,21 @@
+{
+  "name": "discord-dm-authorized-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Discord HTTP interactions app with an administrator-only /dm command, ready for Render.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "register": "node scripts/register-commands.js",
+    "check": "node --check src/server.js && node --check scripts/register-commands.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "tweetnacl": "^1.0.3"
+  }
+}
