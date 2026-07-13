@@ -1,15 +1,15 @@
 {
-  "name": "discord-dm-user-install",
-  "version": "2.0.0",
+  "name": "discord-dm-user-install-clean",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node scripts/register-commands.js && node src/server.js",
     "register": "node scripts/register-commands.js",
-    "server": "node src/server.js"
-  },
-  "engines": {
-    "node": ">=20"
+    "check": "node --check src/config.js && node --check src/discord-api.js && node --check src/server.js && node --check scripts/register-commands.js"
   },
   "dependencies": {
     "dotenv": "^16.6.1",

@@ -12,13 +12,11 @@ services:
         value: 20
       - key: DISCORD_APPLICATION_ID
         sync: false
-      - key: DISCORD_BOT_TOKEN
-        sync: false
       - key: DISCORD_PUBLIC_KEY
+        sync: false
+      - key: DISCORD_BOT_TOKEN
         sync: false
       - key: DM_MESSAGE
         sync: false
-      - key: DM_DELAY_MS
-        value: 1200
       - key: ALLOWED_USER_IDS
         sync: false
