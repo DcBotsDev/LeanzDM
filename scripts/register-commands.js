@@ -1,10 +1,6 @@
 import "dotenv/config";
 
-const {
-  DISCORD_APPLICATION_ID,
-  DISCORD_BOT_TOKEN,
-} = process.env;
-
+const { DISCORD_APPLICATION_ID, DISCORD_BOT_TOKEN } = process.env;
 if (!DISCORD_APPLICATION_ID || !DISCORD_BOT_TOKEN) {
   console.error("DISCORD_APPLICATION_ID oder DISCORD_BOT_TOKEN fehlt.");
   process.exit(1);
@@ -13,18 +9,19 @@ if (!DISCORD_APPLICATION_ID || !DISCORD_BOT_TOKEN) {
 const commands = [
   {
     name: "dm",
-    description: "Sendet einem Nutzer eine vorgefertigte Direktnachricht.",
+    description: "Sendet die konfigurierte Announcement-DM.",
     type: 1,
-    dm_permission: false,
+    integration_types: [0, 1],
+    contexts: [0, 1, 2],
     options: [
       {
         name: "user",
-        description: "Nutzer, der die Nachricht erhalten soll",
+        description: "Empfänger (nur nötig, wenn DM_TO_OPTED_IN_USERS=false)",
         type: 6,
-        required: true,
-      },
-    ],
-  },
+        required: false
+      }
+    ]
+  }
 ];
 
 const response = await fetch(
@@ -33,18 +30,15 @@ const response = await fetch(
     method: "PUT",
     headers: {
       Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify(commands),
-  },
+    body: JSON.stringify(commands)
+  }
 );
 
 const body = await response.text();
-
 if (!response.ok) {
-  console.error(`Registrierung fehlgeschlagen (${response.status}): ${body}`);
+  console.error(`Command-Registrierung fehlgeschlagen (${response.status}): ${body}`);
   process.exit(1);
 }
-
-console.log("Globaler /dm-Command wurde registriert.");
-console.log(body);
+console.log("Globaler /dm-Command registriert.");
